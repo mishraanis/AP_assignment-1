@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3558509b-12fc-4245-9283-00d0781744e8" name="Changes" comment="push 2">
+    <list default="true" id="3558509b-12fc-4245-9283-00d0781744e8" name="Changes" comment="push 3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
     </list>
@@ -99,6 +99,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -123,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633803959388</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="push 3">
+      <created>1633867871032</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1633867871032</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -141,6 +153,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="hello how do you do" />
     <MESSAGE value="push 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="push 2" />
+    <MESSAGE value="push 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="push 3" />
   </component>
 </project>

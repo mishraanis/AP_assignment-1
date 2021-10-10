@@ -422,7 +422,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Portal portal = new Portal();
         System.out.println("CoWin Portal initialized....");
-        System.out.print("---------------------------------");
+        System.out.println("---------------------------------");
         System.out.println("""
                 1. Add Vaccine
                 2. Register Hospital
@@ -444,8 +444,12 @@ public class Main {
                     String vaccine_name = sc.next();
                     System.out.print("Number of Doses: ");
                     int num_doses = sc.nextInt();
-                    System.out.print("Gap Between Doses: ");
-                    int gap = sc.nextInt();
+                    int gap=0;
+                    if(num_doses > 1)
+                    {
+                        System.out.print("Gap Between Doses: ");
+                        gap = sc.nextInt();
+                    }
                     portal.addVaccine(vaccine_name, num_doses, gap);
                     break;
 

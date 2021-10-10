@@ -124,7 +124,11 @@ class Portal
         }
         System.out.print("Enter hospital id: ");
         String ID = sc.next();
-
+        if(!isHospitalRegistered(ID))
+        {
+            System.out.println("Hospital ID " + ID + " not found!!!");
+            return ;
+        }
         for(Citizen cit: ctz)
         {
             if(cit.ID.equals(patientID))
@@ -191,7 +195,7 @@ class Portal
                 }
             }
         }
-        System.out.println("Citizen with ID " + patientID + " not found!!!");
+        System.out.println("Invalid PinCode");
     }
 
 
@@ -216,7 +220,11 @@ class Portal
 
         System.out.println("Enter hospital id: ");
         String ID = sc.next();
-
+        if(!isHospitalRegistered(ID))
+        {
+            System.out.println("Hospital ID " + ID + " not found!!!");
+            return ;
+        }
         for(Citizen cit: ctz)
         {
             if(cit.ID.equals(patientID))
@@ -283,7 +291,7 @@ class Portal
                 }
             }
         }
-        System.out.println("Citizen with ID " + patientID + " not found!!!");
+        System.out.println("Invalid Vaccine Name");
     }
 
 
@@ -433,7 +441,7 @@ public class Main {
                 7. Check Vaccination Status
                 8. Exit""");
         System.out.println("---------------------------------");
-        System.out.println("Choose an option :");
+        System.out.println("Choose an option : ");
         int choice = sc.nextInt();
         while(choice != 8)
         {
@@ -484,6 +492,11 @@ public class Main {
                     break;
 
                 case 4:
+                    if(portal.vaccines.size()==0)
+                    {
+                        System.out.println("No Vaccines are registered yet. Try again Later!");
+                        break;
+                    }
                     System.out.print("Enter Hospital ID: ");
                     String hosp_ID = sc.next();
                     if(!portal.isHospitalRegistered(hosp_ID))

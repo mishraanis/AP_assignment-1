@@ -3,22 +3,24 @@ import java.util.*;
 
 class Portal
 {
-    LinkedList<Hospital> hosp;
-    LinkedList<Citizen> ctz;
-    LinkedList<Vaccine> vaccines;
+    private final LinkedList<Hospital> hosp;
+    private final LinkedList<Citizen> ctz;
+    private final LinkedList<Vaccine> vaccines;
     Portal()
     {
         hosp = new LinkedList<>();
         ctz = new LinkedList<>();
         vaccines = new LinkedList<>();
     }
-
-
+    LinkedList<Vaccine> getVaccines()
+    {
+        return vaccines;
+    }
     void addVaccine(String Name, int num_doses, int gap)
     {
         for(Vaccine vaccine: vaccines)
         {
-            if(vaccine.name.equals(Name))
+            if(vaccine.getName().equals(Name))
             {
                 System.out.println("This vaccine is already registered.");
                 return;
@@ -34,7 +36,7 @@ class Portal
     {
         for(Hospital hospital: hosp)
         {
-            if(hospital.name.equals(Name) && hospital.pincode==pincode)
+            if(hospital.getName().equals(Name) && hospital.getPincode()==pincode)
             {
                 System.out.println("This Hospital is already registered.");
                 return false;
@@ -61,7 +63,7 @@ class Portal
     {
         for(Citizen citizen: ctz)
         {
-            if(citizen.ID.equals(ID))
+            if(citizen.getID().equals(ID))
             {
                 System.out.println("This Citizen is already registered.");
                 return;
@@ -78,19 +80,19 @@ class Portal
     }
     void addSlot(String ID, int day, int qty, String vac_name)
     {
-        if(vaccines == null)
+        if(vaccines.size() == 0)
         {
             System.out.println("No Vaccines have been registered on the website. Please Try again later");
             return ;
         }
         for(Hospital hospital: hosp)
         {
-            if(ID.equals(hospital.hosp_ID))
+            if(ID.equals(hospital.getHosp_ID()))
             {
                 for(Vaccine vaccine: vaccines) {
-                    if (vaccine.name.equals(vac_name)) {
+                    if (vaccine.getName().equals(vac_name)) {
                         Slot new_slot = new Slot(day, vaccine, qty);
-                        hospital.slot.add(new_slot);
+                        hospital.getSlot().add(new_slot);
                         System.out.println("Slot added by Hospital: " + ID + " for Day: " + day + ", Available Quantity: " + qty + " of Vaccine " + vac_name);
                         return;
                     }
@@ -116,10 +118,10 @@ class Portal
 
         for(Hospital hptl: hosp)
         {
-            if(hptl.pincode == pincode)
+            if(hptl.getPincode() == pincode)
             {
                 temp_hosp.add(hptl);
-                System.out.println(hptl.hosp_ID + " " + hptl.name);
+                System.out.println(hptl.getHosp_ID() + " " + hptl.getName());
             }
         }
         System.out.print("Enter hospital id: ");
@@ -131,13 +133,13 @@ class Portal
         }
         for(Citizen cit: ctz)
         {
-            if(cit.ID.equals(patientID))
+            if(cit.getID().equals(patientID))
             {
                 for(Hospital hptl: temp_hosp)
                 {
-                    if(hptl.hosp_ID.equals(ID))
+                    if(hptl.getHosp_ID().equals(ID))
                     {
-                        if(hptl.slot==null)
+                        if(hptl.getSlot() == null)
                         {
                             System.out.println("No slots available");
                             return ;
@@ -146,11 +148,11 @@ class Portal
                         {
                             int i=0;
                             boolean found = false;
-                            for(Slot slot: hptl.slot)
+                            for(Slot slot: hptl.getSlot())
                             {
-                                if(cit.due_date==-1 || slot.day >= cit.due_date)
+                                if(cit.getDue_date()==-1 || slot.getDay() >= cit.getDue_date())
                                 {
-                                    System.out.println(i + "-> Day: " + slot.day + " Available" + " Qty:" + slot.quantity + " Vaccine: " + slot.vac.name);
+                                    System.out.println(i + "-> Day: " + slot.getDay() + " Available" + " Qty:" + slot.getQuantity() + " Vaccine: " + slot.vac.getName());
                                     found = true;
                                 }
                                 i++;
@@ -162,31 +164,33 @@ class Portal
                             }
                             System.out.print("Choose Slot: ");
                             int idx = sc.nextInt();
-                            Slot exact_slot = hptl.slot.get(idx);
+                            Slot exact_slot = hptl.getSlot().get(idx);
 
-                            --exact_slot.quantity;
-                            if(exact_slot.quantity==0)
+                            int n = exact_slot.getQuantity();
+                            exact_slot.setQuantity(--n);
+                            if(exact_slot.getQuantity()==0)
                             {
-                                hptl.slot.remove(idx);
+                                hptl.getSlot().remove(idx);
                             }
 
-                            System.out.println(cit.name + " vaccinated with " + exact_slot.vac.name);
-                            cit.vac_status++;
+                            System.out.println(cit.getName() + " vaccinated with " + exact_slot.vac.getName());
+                            int vac_stat = cit.getVac_status();
+                            cit.setVac_status(++vac_stat);
                             if(cit.vac == null)
                             {
                                 cit.vac = exact_slot.vac;
-                                cit.due_date = exact_slot.day + exact_slot.vac.gap;
+                                cit.setDue_date(exact_slot.getDay() + exact_slot.vac.getGap());
                             }
                             else
                             {
-                                if(cit.vac_status < exact_slot.vac.num_doses)
+                                if(cit.getVac_status() < exact_slot.vac.getNum_doses())
                                 {
-                                    cit.due_date = exact_slot.day + exact_slot.vac.gap;
+                                    cit.setDue_date(exact_slot.getDay() + exact_slot.vac.getGap());
                                 }
-                                else if(exact_slot.vac.num_doses == cit.vac_status)
+                                else if(exact_slot.vac.getNum_doses() == cit.getVac_status())
                                 {
                                     cit.vac = exact_slot.vac;
-                                    cit.due_date = 0;
+                                    cit.setDue_date(0);
                                 }
                             }
                             return ;
@@ -208,12 +212,12 @@ class Portal
 
         for(Hospital hptl: hosp)
         {
-            for(Slot slot: hptl.slot)
+            for(Slot slot: hptl.getSlot())
             {
-                if(slot.vac.name.equals(vac_name))
+                if(slot.vac.getName().equals(vac_name))
                 {
                     temp_hosp.add(hptl);
-                    System.out.println(hptl.hosp_ID + " " + hptl.name);
+                    System.out.println(hptl.getHosp_ID() + " " + hptl.getName());
                 }
             }
         }
@@ -227,13 +231,13 @@ class Portal
         }
         for(Citizen cit: ctz)
         {
-            if(cit.ID.equals(patientID))
+            if(cit.getID().equals(patientID))
             {
                 for(Hospital hptl: temp_hosp)
                 {
-                    if(hptl.hosp_ID.equals(ID))
+                    if(hptl.getHosp_ID().equals(ID))
                     {
-                        if(hptl.slot==null)
+                        if(hptl.getSlot()==null)
                         {
                             System.out.println("No slots available");
                             return ;
@@ -242,11 +246,11 @@ class Portal
                         {
                             int i=0;
                             boolean found = false;
-                            for(Slot slot: hptl.slot)
+                            for(Slot slot: hptl.getSlot())
                             {
-                                if(cit.due_date == -1 || slot.day >= cit.due_date)
+                                if(cit.getDue_date() == -1 || slot.getDay() >= cit.getDue_date())
                                 {
-                                    System.out.println(i + "-> Day: " + slot.day + " Available" + " Qty:" + slot.quantity + " Vaccine: " + slot.vac.name);
+                                    System.out.println(i + "-> Day: " + slot.getDay() + " Available" + " Qty:" + slot.getQuantity() + " Vaccine: " + slot.vac.getName());
                                     found = true;
                                 }
                                 i++;
@@ -258,31 +262,33 @@ class Portal
                             }
                             System.out.print("Choose Slot: ");
                             int idx = sc.nextInt();
-                            Slot exact_slot = hptl.slot.get(idx);
+                            Slot exact_slot = hptl.getSlot().get(idx);
 
-                            --exact_slot.quantity;
-                            if(exact_slot.quantity==0)
+                            int qnty = exact_slot.getQuantity();
+                            exact_slot.setQuantity(--qnty);
+                            if(exact_slot.getQuantity()==0)
                             {
-                                hptl.slot.remove(idx);
+                                hptl.getSlot().remove(idx);
                             }
 
-                            System.out.println(cit.name + " vaccinated with " + exact_slot.vac.name);
-                            cit.vac_status++;
+                            System.out.println(cit.getName() + " vaccinated with " + exact_slot.vac.getName());
+                            int vac_stats = cit.getVac_status();
+                            cit.setVac_status(++vac_stats);
                             if(cit.vac == null)
                             {
                                 cit.vac = exact_slot.vac;
-                                cit.due_date = exact_slot.day + exact_slot.vac.gap;
+                                cit.setDue_date(exact_slot.getDay() + exact_slot.vac.getGap());
                             }
                             else
                             {
-                                if(cit.vac_status < exact_slot.vac.num_doses)
+                                if(cit.getVac_status() < exact_slot.vac.getNum_doses())
                                 {
-                                    cit.due_date = exact_slot.day + exact_slot.vac.gap;
+                                    cit.setDue_date(exact_slot.getDay() + exact_slot.vac.getGap());
                                 }
-                                else if(exact_slot.vac.num_doses == cit.vac_status)
+                                else if(exact_slot.vac.getNum_doses() == cit.getVac_status())
                                 {
                                     cit.vac = exact_slot.vac;
-                                    cit.due_date = 0;
+                                    cit.setDue_date(0);
                                 }
                             }
                             return ;
@@ -299,17 +305,17 @@ class Portal
     {
         for(Hospital hptl: hosp)
         {
-            if(hptl.hosp_ID.equals(ID))
+            if(hptl.getHosp_ID().equals(ID))
             {
-                if(hptl.slot == null)
+                if(hptl.getSlot() == null)
                 {
                     System.out.println("No slots available");
                 }
                 else
                 {
-                    for(Slot slot: hptl.slot)
+                    for(Slot slot: hptl.getSlot())
                     {
-                        System.out.println("Day: " + slot.day + " Available" + " Qty:" + slot.quantity + " Vaccine: " + slot.vac.name);
+                        System.out.println("Day: " + slot.getDay() + " Vaccine: " + slot.vac.getName() + " Available" + " Qty: " + slot.getQuantity());
                     }
                 }
                 return ;
@@ -323,21 +329,21 @@ class Portal
     {
         for(Citizen cit: ctz)
         {
-            if(cit.ID.equals(patientID))
+            if(cit.getID().equals(patientID))
             {
-                if(cit.vac_status == 0)
+                if(cit.getVac_status() == 0)
                 {
                     System.out.println("Citizen REGISTERED");
                     return ;
                 }
-                else if(cit.vac_status < cit.vac.num_doses)
+                else if(cit.getVac_status() < cit.vac.getNum_doses())
                     System.out.println("PARTIALLY VACCINATED");
                 else
                     System.out.println("FULLY VACCINATED");
-                System.out.println("Vaccine Given: " + cit.vac.name);
-                System.out.println("Number of Doses given: " + cit.vac_status);
-                if(cit.vac_status < cit.vac.num_doses)
-                    System.out.println("Next Dose due date: " + cit.due_date);
+                System.out.println("Vaccine Given: " + cit.vac.getName());
+                System.out.println("Number of Doses given: " + cit.getVac_status());
+                if(cit.getVac_status() < cit.vac.getNum_doses())
+                    System.out.println("Next Dose due date: " + cit.getDue_date());
                 return ;
             }
         }
@@ -349,7 +355,7 @@ class Portal
     {
         for(Hospital hptl: hosp)
         {
-            if (hptl.hosp_ID.equals(hosp_ID))
+            if (hptl.getHosp_ID().equals(hosp_ID))
                 return true;
         }
         return false;
@@ -360,7 +366,7 @@ class Portal
     {
         for(Citizen cit: ctz)
         {
-            if (cit.ID.equals(citizen_ID))
+            if (cit.getID().equals(citizen_ID))
                 return true;
         }
         return false;
@@ -370,9 +376,9 @@ class Portal
 }
 
 class Hospital{
-    int pincode;
-    String hosp_ID, name;
-    LinkedList<Slot> slot;
+    private final int pincode;
+    private final String hosp_ID, name;
+    private final LinkedList<Slot> slot;
 
     Hospital(String name, String hosp_ID, int pincode)
     {
@@ -381,12 +387,30 @@ class Hospital{
         this.pincode = pincode;
         slot = new LinkedList<>();
     }
-
+    int getPincode()
+    {
+        return pincode;
+    }
+    String getName()
+    {
+        return name;
+    }
+    String getHosp_ID()
+    {
+        return hosp_ID;
+    }
+    LinkedList<Slot> getSlot()
+    {
+        return slot;
+    }
 }
 
 class Citizen{
-    String name, ID;
-    int age, vac_status, due_date;
+    private final String name;
+    private final String ID;
+    private final int age;
+    private int vac_status;
+    private int due_date;
     Vaccine vac;
     Citizen(String name, int age, String ID)
     {
@@ -397,11 +421,35 @@ class Citizen{
         vac = null;
         due_date = -1;
     }
-
+    String getName()
+    {
+        return name;
+    }
+    String getID()
+    {
+        return ID;
+    }
+    int getVac_status()
+    {
+        return vac_status;
+    }
+    void setVac_status(int n)
+    {
+        vac_status = n;
+    }
+    int getDue_date()
+    {
+        return due_date;
+    }
+    void setDue_date(int n)
+    {
+        due_date = n;
+    }
 }
 
 class Slot{
-    int day, quantity;
+    private final int day;
+    private int quantity;
     Vaccine vac;
     Slot(int day, Vaccine vac, int quantity)
     {
@@ -409,16 +457,41 @@ class Slot{
         this.vac = vac;
         this.quantity = quantity;
     }
+    int getDay()
+    {
+        return day;
+    }
+    int getQuantity()
+    {
+        return quantity;
+    }
+    void setQuantity(int n)
+    {
+        quantity = n;
+    }
 }
 
 class Vaccine{
-    String name;
-    int num_doses, gap;
+    private final String name;
+    private final int num_doses;
+    private final int gap;
     Vaccine(String name, int num_doses, int gap)
     {
         this.name = name;
         this.num_doses = num_doses;
         this.gap = gap;
+    }
+    String getName()
+    {
+        return name;
+    }
+    int getNum_doses()
+    {
+        return num_doses;
+    }
+    int getGap()
+    {
+        return gap;
     }
 }
 public class Main {
@@ -492,7 +565,7 @@ public class Main {
                     break;
 
                 case 4:
-                    if(portal.vaccines.size()==0)
+                    if(portal.getVaccines().size()==0)
                     {
                         System.out.println("No Vaccines are registered yet. Try again Later!");
                         break;
@@ -512,11 +585,11 @@ public class Main {
                         System.out.print("Enter Quantity: ");
                         int qty = sc.nextInt();
                         System.out.println("Select Vaccine");
-                        for (int j = 0; j < portal.vaccines.size(); j++) {
-                            System.out.println(j + ". " + portal.vaccines.get(j).name);
+                        for (int j = 0; j < portal.getVaccines().size(); j++) {
+                            System.out.println(j + ". " + portal.getVaccines().get(j).getName());
                         }
                         int vac_idx = sc.nextInt();
-                        portal.addSlot(hosp_ID, day, qty, portal.vaccines.get(vac_idx).name);
+                        portal.addSlot(hosp_ID, day, qty, portal.getVaccines().get(vac_idx).getName());
                     }
                     break;
 

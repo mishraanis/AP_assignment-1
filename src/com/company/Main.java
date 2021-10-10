@@ -537,6 +537,11 @@ public class Main {
                 case 6:
                     System.out.print("Enter Hospital Id: ");
                     hosp_ID = sc.next();
+                    if(!portal.isHospitalRegistered(hosp_ID))
+                    {
+                        System.out.println("Hospital ID " + hosp_ID + " not found!!!");
+                        break;
+                    }
                     portal.display_slots(hosp_ID);
                     break;
 
@@ -547,6 +552,11 @@ public class Main {
                         System.out.println("Wrong Input. Try Again.");
                         System.out.print("Enter Citizen Id: ");
                         cit_ID = sc.next();
+                    }
+                    if(!portal.isCitizenRegistered(cit_ID))
+                    {
+                        System.out.println("Citizen ID " + cit_ID + " not found!!!");
+                        break;
                     }
                     portal.vaccination_status(cit_ID);
                     break;
